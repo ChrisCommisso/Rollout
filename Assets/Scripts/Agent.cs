@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,7 +25,15 @@ public class Agent : Units
         if(debugmode)
         Gizmos.DrawSphere(myAgent.transform.position,(Width + Depth) / 2f);
     }
-    public Vector3 FindDest(Vector3)
+    public bool setDestIfOnNavMesh(Vector3 dest){
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(dest, out hit, 1f, NavMesh.AllAreas))
+        {
+            myAgent.SetDestination(hit.position);
+            return true;
+        }
+        return false;
+    }
     // Update is called once per frame
     void Update()
     {
