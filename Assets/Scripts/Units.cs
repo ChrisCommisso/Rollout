@@ -8,6 +8,7 @@ public class Units : MonoBehaviour
         Friendly,
         Enemy
     }
+    public Allegiance allegiance;
     public GameObject unitParent;
     public Vector3 location {
         get { return unitParent.transform.position; }

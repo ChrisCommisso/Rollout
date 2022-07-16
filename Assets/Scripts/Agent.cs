@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class Agent : Units
 {
+    public int minimumFriendlyDistance;
     public static List<Agent> agents;
     public bool debugmode = true;
     NavMeshAgent myAgent;
@@ -35,8 +36,20 @@ public class Agent : Units
         return false;
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        foreach (var agent in agents)
+        {
+            if (agent == myAgent || agent.allegiance!=allegiance) {
+                continue;
+            }
+            if ((agent.location - location).sqrMagnitude < minimumFriendlyDistance * minimumFriendlyDistance){
+                myAgent.isStopped = true;
+            }
+            else if (myAgent.isStopped) {
+                myAgent.isStopped = false;
+            }
+        }
+       
     }
 }
