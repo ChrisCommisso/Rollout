@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float MaxCamSpeed;
-    [RangeAttribute(0.000001f,0.999f)]public float ScreenBoundsPercent;
+    [RangeAttribute(0.000001f,0.4f)]public float ScreenBoundsPercent;
 
     public List<Units> availableUnits;
     public List<Units> selectedUnits;
@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         MovementCheck();
-        SelectionCheck();
+        ClickCheck();
         ZoomCheck();
     }
     #endregion
@@ -61,11 +61,7 @@ public class CameraController : MonoBehaviour
 
 
     //check for inputs that give units commands
-    public void CommandCheck()
-    {
-
-    }
-
+   
 
     public void MovementCheck()
     {
@@ -73,17 +69,23 @@ public class CameraController : MonoBehaviour
 
         //If mouse is in certain bounds of the exterior, move camera in that direction
         Vector3 mousePos = Input.mousePosition;
-        if (mousePos.x < leftBound && mousePos.x>0)
-            movementVector += Vector3.left;
+        bool moving = false;
+
+        if (mousePos.x < leftBound && mousePos.x > 0)
+            moving = true;// movementVector += Vector3.left;
         else if (mousePos.x > rightBound && mousePos.x<Screen.width)
-            movementVector += Vector3.right;
+            moving = true;//movementVector += Vector3.right;
 
         if (mousePos.y < bottomBound    &&mousePos.y>0)
-            movementVector += Vector3.back;
+            moving = true;//movementVector += Vector3.back;
         else if (mousePos.y > topBound  &&  mousePos.y <Screen.height)
-            movementVector += Vector3.forward;
+            moving = true;//movementVector += Vector3.forward;
 
-        
+
+        if(moving)
+        {
+            movementVector += Input.mousePosition - new Vector3(Screen.width / 2, Screen.height / 2);
+        }
 
         movementVector = Vector3.ClampMagnitude(movementVector, MaxCamSpeed);
 
@@ -100,7 +102,7 @@ public class CameraController : MonoBehaviour
 
     }
 
-    public void SelectionCheck()
+    public void ClickCheck()
     {
         if(Input.GetMouseButtonDown(0))
         {
@@ -122,8 +124,17 @@ public class CameraController : MonoBehaviour
                 Units unit = hitGO.GetComponent<Units>();
                 if(unit != null && unit.allegiance == Units.Allegiance.Friendly)
                 {
-
+                    //ssick we have selected a unit
+                    if(!selectedUnits.Contains(unit))
+                    {
+                        selectedUnits.Add(unit);
+                    }
+                    else//deselecting
+                    {
+                        selectedUnits.Remove(unit);
+                    }
                 }
+
             }
         }
 

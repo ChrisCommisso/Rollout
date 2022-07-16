@@ -135,8 +135,9 @@ GameObject:
   - component: {fileID: 176853323}
   - component: {fileID: 176853322}
   - component: {fileID: 176853321}
+  - component: {fileID: 176853325}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: TestAgent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,6 +221,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &176853325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176853320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f73735705826234fbfe7ebc93b261fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allegiance: 0
+  unitParent: {fileID: 176853320}
+  Width: 1
+  Height: 1
+  Depth: 1
+  minimumFriendlyDistance: 1
+  debugmode: 1
 --- !u!1 &1234020957
 GameObject:
   m_ObjectHideFlags: 0
