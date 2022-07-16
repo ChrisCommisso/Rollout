@@ -122,24 +122,24 @@ public class CameraController : MonoBehaviour
 
 
 
-        RaycastHit[] hitInfo = new RaycastHit[0];
+        RaycastHit hitInfo = new RaycastHit();
         Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
 
         Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
-        hitInfo = Physics.RaycastAll(ray, 5000f);
+        bool hit = Physics.Raycast(ray,out hitInfo,5000f);
         if (!Input.GetMouseButton(0))
         {
             isHoldingMouseDown = false;
             SelectionBox.SetActive(false);
             //have we hit something?
 
-            
-            if (Input.GetMouseButtonUp(0) &&hitInfo.Length > 0)
+
+            if (Input.GetMouseButtonUp(0) && hit)
             {
 
                 SelectionBoxTimer = SelectionBoxTimeFull;
                 //selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
-                GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
+                GameObject hitGO = hitInfo.collider.gameObject;
                 Units unit = hitGO.GetComponent<Units>();
                 
                 foreach (var agent in selectedUnits)
@@ -147,10 +147,10 @@ public class CameraController : MonoBehaviour
                     if (agent is Agent)
                     {
                         if (((Agent)agent).attackComponent != null)
-                            ((Agent)agent).attackComponent.noAttackMove(hitInfo[hitInfo.Length - 1].point);//try to use the attack component if possible
+                            ((Agent)agent).attackComponent.noAttackMove(hitInfo.point);//try to use the attack component if possible
                         else
                         {
-                            ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                            ((Agent)agent).setDestIfOnNavMesh(hitInfo.point);
                         }
                     }
                 }
@@ -172,7 +172,7 @@ public class CameraController : MonoBehaviour
                     return;
                 }
                 SelectionBox.SetActive(true);
-                selectionEndPoint = hitInfo[hitInfo.Length - 1].point;
+                selectionEndPoint = hitInfo.point;
                 selectionEndPoint.y = -40f;
                 Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
 
@@ -203,10 +203,10 @@ public class CameraController : MonoBehaviour
 
                 
                 //have we hit something?
-                if (hitInfo.Length > 0)
+                if (hit)
                 {
                     //selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
-                    GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
+                    GameObject hitGO = hitInfo.collider.gameObject;
                     Units unit = hitGO.GetComponent<Units>();
                     Attackable attackAttribute = hitGO.GetComponent<Attackable>();
                     //check if we are clicking on a unit
@@ -231,7 +231,7 @@ public class CameraController : MonoBehaviour
                     }
                     else
                     {
-                        selectionStartPoint = hitInfo[hitInfo.Length - 1].point;
+                        selectionStartPoint = hitInfo.point;
                         foreach (Units item in selectedUnits)
                         {
                             item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(selectionStartPoint);
@@ -244,11 +244,11 @@ public class CameraController : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(1))
             {
-                if(hitInfo.Length>0)
+                if(hit)
                 {
                     foreach (Units unit in selectedUnits)
                     {
-                        unit.gameObject.GetComponent<AutoAttack>()?.noAttackMove(hitInfo[hitInfo.Length - 1].point);
+                        unit.gameObject.GetComponent<AutoAttack>()?.noAttackMove(hitInfo.point);
                     }
 
 

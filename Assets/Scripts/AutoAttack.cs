@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AutoAttack : MonoBehaviour
 {
+    public Animator unitController;
     public float attackdelay1;//delay before damage
     public float attackdelay2;//delay after damage
     public float attackRange;//attack range
@@ -18,10 +19,13 @@ public class AutoAttack : MonoBehaviour
     Agent agentRef;
     IEnumerator DoAttack(Attackable target) {
         agentRef.attacking = true;
+        transform.LookAt(target.transform.position);
+        unitController.SetTrigger("Attack");
         yield return new WaitForSeconds(attackdelay1);
         target.processDamage(Random.Range(1,7));
         yield return new WaitForSeconds(attackdelay2);
         agentRef.attacking = false;
+        
     }
     // Start is called before the first frame update
     void Awake()
@@ -52,6 +56,7 @@ public class AutoAttack : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        
         if (target == null && currentAttackType == AttackType.target)
         {
             currentAttackType = AttackType.proximity;
