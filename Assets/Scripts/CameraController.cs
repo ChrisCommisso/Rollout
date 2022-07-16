@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
 
 public class CameraController : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class CameraController : MonoBehaviour
     private float topBound;
     private float bottomBound;
     private bool isHoldingMouseDown;
+    private float SelectionBoxTimer;
+    private float SelectionBoxTimeFull = 0.243f;
 
     public static CameraController Instance;
 
@@ -35,6 +38,7 @@ public class CameraController : MonoBehaviour
             Destroy(this);
         mainCamera = gameObject.GetComponent<Camera>();
         ResetMovementBounds();
+
     }
 
     // Update is called once per frame
@@ -113,41 +117,80 @@ public class CameraController : MonoBehaviour
 
     public void ClickCheck()
     {
+        Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                                                    Input.mousePosition.y, mainCamera.nearClipPlane));
 
+
+
+        RaycastHit[] hitInfo = new RaycastHit[0];
+        Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
+
+        Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
+        hitInfo = Physics.RaycastAll(ray, 5000f);
         if (!Input.GetMouseButton(0))
         {
             isHoldingMouseDown = false;
             SelectionBox.SetActive(false);
+            //have we hit something?
+
+            
+            if (Input.GetMouseButtonUp(0) &&hitInfo.Length > 0)
+            {
+
+                SelectionBoxTimer = SelectionBoxTimeFull;
+                //selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
+                GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
+                Units unit = hitGO.GetComponent<Units>();
+                
+                foreach (var agent in selectedUnits)
+                {
+                    if (agent is Agent)
+                    {
+                        if (((Agent)agent).attackComponent != null)
+                            ((Agent)agent).attackComponent.noAttackMove(hitInfo[hitInfo.Length - 1].point);//try to use the attack component if possible
+                        else
+                        {
+                            ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                        }
+                    }
+                }
+
+
+                
+
+            }
         }
         else
         {
-            Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-                                                    Input.mousePosition.y, mainCamera.nearClipPlane));
-
-            RaycastHit[] hitInfo = new RaycastHit[0];
-            Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
-
-            Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
-            hitInfo = Physics.RaycastAll(ray, 5000f);
-
+            
+            
             if (isHoldingMouseDown)
             {         
+                if(SelectionBoxTimer>0)
+                {
+                    SelectionBoxTimer -= Time.deltaTime;
+                    return;
+                }
+                SelectionBox.SetActive(true);
                 selectionEndPoint = hitInfo[hitInfo.Length - 1].point;
                 selectionEndPoint.y = -40f;
                 Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
 
                 //move box to midpoint between
                 Vector3 boxPos = selectionStartPoint + (betweenVector * 0.5f);
-                boxPos.y = hitInfo[hitInfo.Length-1].point.y;
-                //Debug.DrawLine(selectionStartPoint, selectionStartPoint + Vector3.up * 200f, Color.blue, 0.14f);
-                //Debug.DrawLine(selectionEndPoint, selectionEndPoint + Vector3.up * 200f, Color.red, 0.14f);
+                boxPos.y = selectionStartPoint.y+10;
+                Debug.DrawLine(selectionStartPoint, selectionStartPoint + Vector3.up * 200f, Color.blue, 0.14f);
+                Debug.DrawLine(selectionEndPoint, selectionEndPoint + Vector3.up * 200f, Color.red, 0.14f);
 
                 SelectionBox.transform.position = boxPos;
                 Debug.Log($"Selection Starting Point:{selectionStartPoint}");
                 SelectionBox.transform.localScale = new Vector3(betweenVector.x, 14, betweenVector.z);
-
+                SelectionBox.GetComponent<Collider>();
                 //Check for Units inside Selection Box;
+
                 
+
+
             }
             if (Input.GetMouseButtonDown(0))
             {
@@ -165,6 +208,8 @@ public class CameraController : MonoBehaviour
                     //selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
                     GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
                     Units unit = hitGO.GetComponent<Units>();
+                    Attackable attackAttribute = hitGO.GetComponent<Attackable>();
+                    //check if we are clicking on a unit
                     if (unit != null && unit.allegiance == Units.Allegiance.Friendly)
                     {
                         //ssick we have selected a unit
@@ -177,26 +222,39 @@ public class CameraController : MonoBehaviour
                             selectedUnits.Remove(unit);
                         }
                     }
+                    else if(attackAttribute!=null)
+                    {
+                        foreach (Units item in selectedUnits)
+                        {
+                            item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(attackAttribute);
+                        }
+                    }
                     else
                     {
-                        foreach (var agent in selectedUnits)
-                        {
-                            if (agent is Agent)
-                            {
-                                if (((Agent)agent).attackComponent != null)
-                                    ((Agent)agent).attackComponent.noAttackMove(hitInfo[hitInfo.Length - 1].point);//try to use the attack component if possible
-                                else
-                                {
-                                    ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
-                                }
-                            }
-                        }
                         selectionStartPoint = hitInfo[hitInfo.Length - 1].point;
+                        foreach (Units item in selectedUnits)
+                        {
+                            item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(selectionStartPoint);
+                        }
+                        
                     }
                     selectionStartPoint.y = -40f;
-                    SelectionBox.SetActive(true);
+                    
                 }
             }
+            if (Input.GetMouseButtonDown(1))
+            {
+                if(hitInfo.Length>0)
+                {
+                    foreach (Units unit in selectedUnits)
+                    {
+                        unit.gameObject.GetComponent<AutoAttack>()?.noAttackMove(hitInfo[hitInfo.Length - 1].point);
+                    }
+
+
+                }
+            }
+
         }        
     }
       
