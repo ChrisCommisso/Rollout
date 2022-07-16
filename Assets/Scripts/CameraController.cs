@@ -84,7 +84,11 @@ public class CameraController : MonoBehaviour
 
         if(moving)
         {
-            movementVector += Input.mousePosition - new Vector3(Screen.width / 2, Screen.height / 2);
+            Vector3 temp = Vector3.Normalize(Input.mousePosition - new Vector3(Screen.width / 2f, Screen.height / 2f));
+            temp.z = temp.y;
+            temp.y = 0;
+            movementVector += temp;
+            
         }
 
         movementVector = Vector3.ClampMagnitude(movementVector, MaxCamSpeed);
