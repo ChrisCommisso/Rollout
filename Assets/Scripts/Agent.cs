@@ -42,12 +42,13 @@ public class Agent : Units
     // Update is called once per frame
     void FixedUpdate()
     {
+      
+        attackComponent?.unitController?.SetFloat("Movespeed",myAgent.velocity.magnitude);
+        
         if(agents!=null)
         foreach (var agent in agents)
         {
             if (agent == this || agent.allegiance!=allegiance) {
-                    myAgent.isStopped = false;
-                    print(myAgent.destination);
                     continue;
             }
             if ((agent.location - location).sqrMagnitude < minimumFriendlyDistance * minimumFriendlyDistance||attacking){
