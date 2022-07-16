@@ -112,12 +112,14 @@ public class CameraController : MonoBehaviour
         {
             isHoldingMouseDown = true;
             //check for units with raycaast
-            Vector3 dest = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+   Input.mousePosition.y, mainCamera.nearClipPlane));
+            
             //RaycastOrigin.z = RaycastOrigin.y;
             //RaycastOrigin.y = transform.position.y;
             
             RaycastHit[] hitInfo=new RaycastHit[0];
-            Ray ray = new Ray(mainCamera.transform.position, (dest-mainCamera.transform.position).normalized);
+            Ray ray = new Ray(mainCamera.transform.position, (dest- mainCamera.transform.position ).normalized);
             
             Debug.DrawRay(ray.origin, ray.direction*5000f, Color.green,2f);
             hitInfo = Physics.RaycastAll(ray, 5000f);

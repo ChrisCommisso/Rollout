@@ -11,14 +11,15 @@ public class Agent : Units
     public bool debugmode = true;
     public NavMeshAgent myAgent;
     // Start is called before the first frame update
-    void Start()
+    public void Awake()
     {
-        if (agents != null) 
+        if (agents == null) 
         {
             agents = new List<Agent>();
         }
         myAgent.radius = (Width + Depth) / 2f;
         myAgent.height = Height;
+        agents.Add(this);
     }
 
     private void OnDrawGizmos()
@@ -41,14 +42,16 @@ public class Agent : Units
         if(agents!=null)
         foreach (var agent in agents)
         {
-            if (agent == myAgent || agent.allegiance!=allegiance) {
-                continue;
+            if (agent == this || agent.allegiance!=allegiance) {
+                    myAgent.isStopped = false;
+                    print(myAgent.destination);
+                    continue;
             }
             if ((agent.location - location).sqrMagnitude < minimumFriendlyDistance * minimumFriendlyDistance){
-                myAgent.isStopped = true;
+                    myAgent.isStopped = true;
             }
             else if (myAgent.isStopped) {
-                myAgent.isStopped = false;
+                    myAgent.isStopped = false;
             }
         }
        
