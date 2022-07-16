@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
 
 public class CameraController : MonoBehaviour
 {
@@ -154,6 +155,7 @@ public class CameraController : MonoBehaviour
                     }
                 }
 
+
                 
 
             }
@@ -206,6 +208,8 @@ public class CameraController : MonoBehaviour
                     //selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
                     GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
                     Units unit = hitGO.GetComponent<Units>();
+                    Attackable attackAttribute = hitGO.GetComponent<Attackable>();
+                    //check if we are clicking on a unit
                     if (unit != null && unit.allegiance == Units.Allegiance.Friendly)
                     {
                         //ssick we have selected a unit
@@ -218,15 +222,39 @@ public class CameraController : MonoBehaviour
                             selectedUnits.Remove(unit);
                         }
                     }
+                    else if(attackAttribute!=null)
+                    {
+                        foreach (Units item in selectedUnits)
+                        {
+                            item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(attackAttribute);
+                        }
+                    }
                     else
                     {
-                       
                         selectionStartPoint = hitInfo[hitInfo.Length - 1].point;
+                        foreach (Units item in selectedUnits)
+                        {
+                            item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(selectionStartPoint);
+                        }
+                        
                     }
                     selectionStartPoint.y = -40f;
                     
                 }
             }
+            if (Input.GetMouseButtonDown(1))
+            {
+                if(hitInfo.Length>0)
+                {
+                    foreach (Units unit in selectedUnits)
+                    {
+                        unit.gameObject.GetComponent<AutoAttack>()?.noAttackMove(hitInfo[hitInfo.Length - 1].point);
+                    }
+
+
+                }
+            }
+
         }        
     }
       
