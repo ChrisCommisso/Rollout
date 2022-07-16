@@ -6,13 +6,16 @@ using UnityEngine.AI;
 
 public class Agent : Units
 {
+    public bool attacking;
     public float minimumFriendlyDistance;
     public static List<Agent> agents;
     public bool debugmode = true;
     public NavMeshAgent myAgent;
+    public AutoAttack attackComponent;
     // Start is called before the first frame update
     public void Awake()
     {
+        attackComponent = GetComponent<AutoAttack>();
         if (agents == null) 
         {
             agents = new List<Agent>();
@@ -47,7 +50,7 @@ public class Agent : Units
                     print(myAgent.destination);
                     continue;
             }
-            if ((agent.location - location).sqrMagnitude < minimumFriendlyDistance * minimumFriendlyDistance){
+            if ((agent.location - location).sqrMagnitude < minimumFriendlyDistance * minimumFriendlyDistance||attacking){
                     myAgent.isStopped = true;
             }
             else if (myAgent.isStopped) {
