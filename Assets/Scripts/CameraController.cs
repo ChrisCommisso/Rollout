@@ -117,6 +117,7 @@ public class CameraController : MonoBehaviour
         if (!Input.GetMouseButton(0))
         {
             isHoldingMouseDown = false;
+            SelectionBox.SetActive(false);
         }
         else
         {
@@ -126,27 +127,28 @@ public class CameraController : MonoBehaviour
             RaycastHit[] hitInfo = new RaycastHit[0];
             Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
 
-            Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 2f);
+            Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
             hitInfo = Physics.RaycastAll(ray, 5000f);
 
             if (isHoldingMouseDown)
-            {
-
-                
-
+            {         
                 selectionEndPoint = hitInfo[hitInfo.Length - 1].point;
+                selectionEndPoint.y = -40f;
                 Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
 
                 //move box to midpoint between
                 Vector3 boxPos = selectionStartPoint + (betweenVector * 0.5f);
-                boxPos.y = -37f;
+                boxPos.y = hitInfo[hitInfo.Length-1].point.y;
+                //Debug.DrawLine(selectionStartPoint, selectionStartPoint + Vector3.up * 200f, Color.blue, 0.14f);
+                //Debug.DrawLine(selectionEndPoint, selectionEndPoint + Vector3.up * 200f, Color.red, 0.14f);
 
                 SelectionBox.transform.position = boxPos;
+                Debug.Log($"Selection Starting Point:{selectionStartPoint}");
+                SelectionBox.transform.localScale = new Vector3(betweenVector.x, 14, betweenVector.z);
 
-                SelectionBox.transform.localScale = new Vector3(betweenVector.x, 50, betweenVector.z);
+                //Check for Units inside Selection Box;
+                
             }
-
-
             if (Input.GetMouseButtonDown(0))
             {
                 isHoldingMouseDown = true;
@@ -156,15 +158,11 @@ public class CameraController : MonoBehaviour
                 //RaycastOrigin.z = RaycastOrigin.y;
                 //RaycastOrigin.y = transform.position.y;
 
-                RaycastHit[] hitInfo = new RaycastHit[0];
-                Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
-
-                Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 2f);
-                hitInfo = Physics.RaycastAll(ray, 5000f);
+                
                 //have we hit something?
                 if (hitInfo.Length > 0)
                 {
-                    selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
+                    //selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
                     GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
                     Units unit = hitGO.GetComponent<Units>();
                     if (unit != null && unit.allegiance == Units.Allegiance.Friendly)
@@ -185,23 +183,21 @@ public class CameraController : MonoBehaviour
                         {
                             if (agent is Agent)
                             {
-                                ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                                if (((Agent)agent).attackComponent != null)
+                                    ((Agent)agent).attackComponent.noAttackMove(hitInfo[hitInfo.Length - 1].point);//try to use the attack component if possible
+                                else
+                                {
+                                    ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                                }
                             }
                         }
-                        selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
+                        selectionStartPoint = hitInfo[hitInfo.Length - 1].point;
                     }
-
+                    selectionStartPoint.y = -40f;
+                    SelectionBox.SetActive(true);
                 }
-
-
-                //create box
-
             }
-
-
-        }
-
-        
+        }        
     }
       
 
