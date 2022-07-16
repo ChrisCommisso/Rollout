@@ -68,22 +68,24 @@ public class CameraController : MonoBehaviour
 
     public void MovementCheck()
     {
-        movementVector = movementVector * 0.99349f;
+        movementVector = movementVector * 0.97349f;
 
         //If mouse is in certain bounds of the exterior, move camera in that direction
         Vector3 mousePos = Input.mousePosition;
         bool moving = false;
 
-        if (mousePos.x < leftBound && mousePos.x > 0)
+        if (mousePos.x < leftBound )
             moving = true;// movementVector += Vector3.left;
-        else if (mousePos.x > rightBound && mousePos.x<Screen.width)
+        else if (mousePos.x > rightBound )
             moving = true;//movementVector += Vector3.right;
 
-        if (mousePos.y < bottomBound    &&mousePos.y>0)
+        if (mousePos.y < bottomBound)
             moving = true;//movementVector += Vector3.back;
-        else if (mousePos.y > topBound  &&  mousePos.y <Screen.height)
+        else if (mousePos.y > topBound)
             moving = true;//movementVector += Vector3.forward;
 
+        if (mousePos.x < 0 || mousePos.x > Screen.width || mousePos.y < 0 || mousePos.y > Screen.height)
+            moving = false;
 
         if(moving)
         {
@@ -111,70 +113,95 @@ public class CameraController : MonoBehaviour
 
     public void ClickCheck()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            isHoldingMouseDown = true;
-            //check for units with raycaast
-            Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-   Input.mousePosition.y, mainCamera.nearClipPlane));
-            
-            //RaycastOrigin.z = RaycastOrigin.y;
-            //RaycastOrigin.y = transform.position.y;
-            
-            RaycastHit[] hitInfo=new RaycastHit[0];
-            Ray ray = new Ray(mainCamera.transform.position, (dest- mainCamera.transform.position ).normalized);
-            
-            Debug.DrawRay(ray.origin, ray.direction*5000f, Color.green,2f);
-            hitInfo = Physics.RaycastAll(ray, 5000f);
-            //have we hit something?
-            if (hitInfo.Length>0)
-            {
-                GameObject hitGO = hitInfo[hitInfo.Length-1].collider.gameObject;
-                Units unit = hitGO.GetComponent<Units>();
-                if (unit != null && unit.allegiance == Units.Allegiance.Friendly)
-                {
-                    //ssick we have selected a unit
-                    if (!selectedUnits.Contains(unit))
-                    {
-                        selectedUnits.Add(unit);
-                    }
-                    else//deselecting
-                    {
-                        selectedUnits.Remove(unit);
-                    }
-                }
-                else {
-                    foreach (var agent in selectedUnits)
-                    {
-                        if (agent is Agent) {
-                            ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
-                        }
-                    }
-                }
 
-            }
-
-            selectionStartPoint = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            //create box
-
-        }
-
-        if(isHoldingMouseDown)
-        {
-            selectionEndPoint = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
-            
-            //move box to midpoint between
-            SelectionBox.transform.position=(betweenVector * 0.5f) + selectionStartPoint;
-            
-            SelectionBox.transform.localScale = new Vector3(betweenVector.x,1,betweenVector.z);
-        }
-
-
-        if(Input.GetMouseButtonUp(0))
+        if (!Input.GetMouseButton(0))
         {
             isHoldingMouseDown = false;
         }
+        else
+        {
+            Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                                                    Input.mousePosition.y, mainCamera.nearClipPlane));
+
+            RaycastHit[] hitInfo = new RaycastHit[0];
+            Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
+
+            Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 2f);
+            hitInfo = Physics.RaycastAll(ray, 5000f);
+
+            if (isHoldingMouseDown)
+            {
+
+                
+
+                selectionEndPoint = hitInfo[hitInfo.Length - 1].point;
+                Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
+
+                //move box to midpoint between
+                Vector3 boxPos = selectionStartPoint + (betweenVector * 0.5f);
+                boxPos.y = -37f;
+
+                SelectionBox.transform.position = boxPos;
+
+                SelectionBox.transform.localScale = new Vector3(betweenVector.x, 50, betweenVector.z);
+            }
+
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                isHoldingMouseDown = true;
+                //check for units with raycaast
+
+
+                //RaycastOrigin.z = RaycastOrigin.y;
+                //RaycastOrigin.y = transform.position.y;
+
+                RaycastHit[] hitInfo = new RaycastHit[0];
+                Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
+
+                Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 2f);
+                hitInfo = Physics.RaycastAll(ray, 5000f);
+                //have we hit something?
+                if (hitInfo.Length > 0)
+                {
+                    selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
+                    GameObject hitGO = hitInfo[hitInfo.Length - 1].collider.gameObject;
+                    Units unit = hitGO.GetComponent<Units>();
+                    if (unit != null && unit.allegiance == Units.Allegiance.Friendly)
+                    {
+                        //ssick we have selected a unit
+                        if (!selectedUnits.Contains(unit))
+                        {
+                            selectedUnits.Add(unit);
+                        }
+                        else//deselecting
+                        {
+                            selectedUnits.Remove(unit);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var agent in selectedUnits)
+                        {
+                            if (agent is Agent)
+                            {
+                                ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                            }
+                        }
+                        selectionStartPoint = mainCamera.ScreenToWorldPoint(hitInfo[hitInfo.Length - 1].point);
+                    }
+
+                }
+
+
+                //create box
+
+            }
+
+
+        }
+
+        
     }
       
 
