@@ -631,3 +631,4 @@ MonoBehaviour:
   availableUnits: []
   selectedUnits: []
   mainCamera: {fileID: 0}
+  SelectionBox: {fileID: 861310821}
