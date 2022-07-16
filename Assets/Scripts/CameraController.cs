@@ -13,6 +13,8 @@ public class CameraController : MonoBehaviour
 
     public Camera mainCamera;
 
+    public float maxDistFromGround;
+    public float minDistFromGround;
     public GameObject SelectionBox;
     private Vector3 selectionStartPoint;
     private Vector3 selectionEndPoint;
@@ -58,6 +60,22 @@ public class CameraController : MonoBehaviour
         rightBound = Screen.width - leftBound;
         bottomBound = Screen.height * ScreenBoundsPercent;
         topBound = Screen.height - bottomBound;
+    }
+
+    public void CheckDistanceFromGround()
+    {
+        Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                                                    Input.mousePosition.y, mainCamera.nearClipPlane));
+        RaycastHit[] hitInfo = new RaycastHit[0];
+        Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
+
+        Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
+        hitInfo = Physics.RaycastAll(ray, 5000f);
+
+        if(hitInfo.Length>0)
+        {
+
+        }
     }
 
 
@@ -109,16 +127,50 @@ public class CameraController : MonoBehaviour
 
     public void ZoomCheck()
     {
+        Vector3 dest = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                                                    Input.mousePosition.y, mainCamera.nearClipPlane));
+        RaycastHit[] hitInfo = new RaycastHit[0];
+        Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
+
+        Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
+        hitInfo = Physics.RaycastAll(ray, 5000f);
+        float dist = Vector3.Distance(hitInfo[hitInfo.Length - 1].point, transform.position);
         //check for scroll input
-        if(Input.mouseScrollDelta.y>0)
+        if (Input.mouseScrollDelta.y!=0)
         {
+            
+            //CHECK IF NO hit
+            if(hitInfo.Length==0)
+            {
+
+            }
+            Debug.Log($"Mouse Scroll Delta x:{Input.mouseScrollDelta.x}, y:{Input.mouseScrollDelta.y}");
+            //if hit check if possible to move based on direction
+            if (Input.mouseScrollDelta.y<0
+                &&dist<maxDistFromGround)
+                transform.position += ray.direction * -3f;
+            if (Input.mouseScrollDelta.y > 0
+                && dist > minDistFromGround)
+                transform.position += ray.direction * 3f;
+
+
+
 
         }
 
+        if(dist<minDistFromGround)
+            transform.position += ray.direction * -1f;
+        else if (dist>maxDistFromGround)
+            transform.position += ray.direction * 1f;
 
-        Debug.Log($"Mouse Scroll Delta x:{Input.mouseScrollDelta.x}, y:{Input.mouseScrollDelta.y}");
+
+        //Debug.Log($"Mouse Scroll Delta x:{Input.mouseScrollDelta.x}, y:{Input.mouseScrollDelta.y}");
 
     }
+
+
+
+
 
     public void ClickCheck()
     {
@@ -126,19 +178,20 @@ public class CameraController : MonoBehaviour
                                                     Input.mousePosition.y, mainCamera.nearClipPlane));
 
 
-
         RaycastHit[] hitInfo = new RaycastHit[0];
         Ray ray = new Ray(mainCamera.transform.position, (dest - mainCamera.transform.position).normalized);
 
         Debug.DrawRay(ray.origin, ray.direction * 5000f, Color.green, 0.02f);
         hitInfo = Physics.RaycastAll(ray, 5000f);
+
+        //when not hitting the mouse button
         if (!Input.GetMouseButton(0))
         {
             isHoldingMouseDown = false;
             SelectionBox.SetActive(false);
             //have we hit something?
 
-            
+            //are we lifting mouse button up this frame?
             if (Input.GetMouseButtonUp(0) &&hitInfo.Length > 0)
             {
 
@@ -178,14 +231,15 @@ public class CameraController : MonoBehaviour
                 }
                 SelectionBox.SetActive(true);
                 selectionEndPoint = hitInfo[hitInfo.Length - 1].point;
-                selectionEndPoint.y = -40f;
+                //selectionEndPoint.y = -40f;
                 Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
 
                 //move box to midpoint between
                 Vector3 boxPos = selectionStartPoint + (betweenVector * 0.5f);
-                boxPos.y = selectionStartPoint.y+10;
+                boxPos.y = selectionStartPoint.y;
                 Debug.DrawLine(selectionStartPoint, selectionStartPoint + Vector3.up * 200f, Color.blue, 0.14f);
                 Debug.DrawLine(selectionEndPoint, selectionEndPoint + Vector3.up * 200f, Color.red, 0.14f);
+
 
                 SelectionBox.transform.position = boxPos;
                 Debug.Log($"Selection Starting Point:{selectionStartPoint}");
@@ -243,7 +297,7 @@ public class CameraController : MonoBehaviour
                         }
                         
                     }
-                    selectionStartPoint.y = -40f;
+                    //selectionStartPoint.y = -40f;
                     
                 }
             }

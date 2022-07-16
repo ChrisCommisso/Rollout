@@ -8,6 +8,13 @@ public class Units : MonoBehaviour
         Friendly,
         Enemy
     }
+    public enum AnimationState
+    {
+        Idle,
+        Run,
+        Attack,
+        Other
+    }
     public Allegiance allegiance;
     public GameObject unitParent;
     public Vector3 location {
