@@ -12,6 +12,9 @@ public class CameraController : MonoBehaviour
 
     public Camera mainCamera;
 
+    public GameObject SelectionBox;
+    private Vector3 selectionStartPoint;
+    private Vector3 selectionEndPoint;
 
     private Vector3 movementVector;
     private float leftBound;
@@ -140,6 +143,21 @@ public class CameraController : MonoBehaviour
                 }
 
             }
+
+            selectionStartPoint = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            //create box
+
+        }
+
+        if(isHoldingMouseDown)
+        {
+            selectionEndPoint = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 betweenVector = selectionEndPoint - selectionStartPoint;
+            
+            //move box to midpoint between
+            SelectionBox.transform.position=(betweenVector * 0.5f) + selectionStartPoint;
+            
+            SelectionBox.transform.localScale = new Vector3(betweenVector.x,1,betweenVector.z);
         }
 
 
