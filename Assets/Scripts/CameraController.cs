@@ -110,8 +110,13 @@ public class CameraController : MonoBehaviour
     public void ZoomCheck()
     {
         //check for scroll input
+        if(Input.mouseScrollDelta.y>0)
+        {
+
+        }
 
 
+        Debug.Log($"Mouse Scroll Delta x:{Input.mouseScrollDelta.x}, y:{Input.mouseScrollDelta.y}");
 
     }
 
