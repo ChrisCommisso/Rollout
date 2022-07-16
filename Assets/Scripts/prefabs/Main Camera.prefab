@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 1804016454}
   - component: {fileID: 1804016453}
   - component: {fileID: 1804016452}
-  m_Layer: 0
+  - component: {fileID: 1930249920}
+  m_Layer: 2
   m_Name: Selection Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1804016455
 Transform:
   m_ObjectHideFlags: 0
@@ -93,10 +94,22 @@ BoxCollider:
   m_GameObject: {fileID: 1804016451}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1930249920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804016451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2eb7ae52c0337540a946e44a7492463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8730463572054527855
 GameObject:
   m_ObjectHideFlags: 0
