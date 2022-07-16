@@ -56,7 +56,8 @@ public class AutoAttack : MonoBehaviour
         {
             currentAttackType = AttackType.proximity;
         }
-        else if (target.gameObject.GetComponent<Attackable>().Health <= 0) {
+        else if(target!=null) 
+            if(target.gameObject.GetComponent<Attackable>().Health <= 0) {
             currentAttackType = AttackType.proximity;
         }
         switch (currentAttackType)
