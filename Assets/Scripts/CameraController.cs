@@ -115,9 +115,15 @@ public class CameraController : MonoBehaviour
             
             Debug.DrawRay(ray.origin, ray.direction*50f, Color.green,2f);
             bool hit = Physics.Raycast(ray, out hitInfo, 500f);
+            //have we hit something?
             if (hit)
             {
-                
+                GameObject hitGO = hitInfo.collider.gameObject;
+                Units unit = hitGO.GetComponent<Units>();
+                if(unit != null && unit.allegiance == Units.Allegiance.Friendly)
+                {
+
+                }
             }
         }
 
