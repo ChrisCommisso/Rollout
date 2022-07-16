@@ -24,7 +24,7 @@ public class Agent : Units
         if(debugmode)
         Gizmos.DrawSphere(myAgent.transform.position,(Width + Depth) / 2f);
     }
-    public Vector3 FindDest(Vector3)
+    //public Vector3 FindDest(Vector3)
     // Update is called once per frame
     void Update()
     {
