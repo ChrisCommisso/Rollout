@@ -6,10 +6,10 @@ using UnityEngine.AI;
 
 public class Agent : Units
 {
-    public int minimumFriendlyDistance;
+    public float minimumFriendlyDistance;
     public static List<Agent> agents;
     public bool debugmode = true;
-    NavMeshAgent myAgent;
+    public NavMeshAgent myAgent;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +38,7 @@ public class Agent : Units
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(agents!=null)
         foreach (var agent in agents)
         {
             if (agent == myAgent || agent.allegiance!=allegiance) {

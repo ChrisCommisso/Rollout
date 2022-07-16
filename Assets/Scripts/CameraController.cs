@@ -112,30 +112,38 @@ public class CameraController : MonoBehaviour
         {
             isHoldingMouseDown = true;
             //check for units with raycaast
-            Vector3 RaycastOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 dest = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             //RaycastOrigin.z = RaycastOrigin.y;
             //RaycastOrigin.y = transform.position.y;
-
-            RaycastHit hitInfo;
-            Ray ray = new Ray(RaycastOrigin, Vector3.down);
             
-            Debug.DrawRay(ray.origin, ray.direction*50f, Color.green,2f);
-            bool hit = Physics.Raycast(ray, out hitInfo, 500f);
+            RaycastHit[] hitInfo=new RaycastHit[0];
+            Ray ray = new Ray(mainCamera.transform.position, (dest-mainCamera.transform.position).normalized);
+            
+            Debug.DrawRay(ray.origin, ray.direction*5000f, Color.green,2f);
+            hitInfo = Physics.RaycastAll(ray, 5000f);
             //have we hit something?
-            if (hit)
+            if (hitInfo.Length>0)
             {
-                GameObject hitGO = hitInfo.collider.gameObject;
+                GameObject hitGO = hitInfo[hitInfo.Length-1].collider.gameObject;
                 Units unit = hitGO.GetComponent<Units>();
-                if(unit != null && unit.allegiance == Units.Allegiance.Friendly)
+                if (unit != null && unit.allegiance == Units.Allegiance.Friendly)
                 {
                     //ssick we have selected a unit
-                    if(!selectedUnits.Contains(unit))
+                    if (!selectedUnits.Contains(unit))
                     {
                         selectedUnits.Add(unit);
                     }
                     else//deselecting
                     {
                         selectedUnits.Remove(unit);
+                    }
+                }
+                else {
+                    foreach (var agent in selectedUnits)
+                    {
+                        if (agent is Agent) {
+                            ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                        }
                     }
                 }
 
