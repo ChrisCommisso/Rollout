@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Assets.Scripts
 {
 
-    class Attackable : MonoBehaviour
+    public class Attackable : MonoBehaviour
     {
         public int startingHealth;
         public void Start()

@@ -144,7 +144,11 @@ public class CameraController : MonoBehaviour
                     foreach (var agent in selectedUnits)
                     {
                         if (agent is Agent) {
-                            ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                            if (((Agent)agent).attackComponent != null)
+                                ((Agent)agent).attackComponent.noAttackMove(hitInfo[hitInfo.Length - 1].point);//try to use the attack component if possible
+                            else {
+                                ((Agent)agent).setDestIfOnNavMesh(hitInfo[hitInfo.Length - 1].point);
+                            }
                         }
                     }
                 }
