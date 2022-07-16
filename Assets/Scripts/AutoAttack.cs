@@ -18,9 +18,9 @@ public class AutoAttack : MonoBehaviour
     Agent agentRef;
     IEnumerator DoAttack(Attackable target) {
         agentRef.attacking = true;
-        yield return new WaitForSecondsRealtime(attackdelay1);
+        yield return new WaitForSeconds(attackdelay1);
         target.processDamage(Random.Range(1,7));
-        yield return new WaitForSecondsRealtime(attackdelay2);
+        yield return new WaitForSeconds(attackdelay2);
         agentRef.attacking = false;
     }
     // Start is called before the first frame update
