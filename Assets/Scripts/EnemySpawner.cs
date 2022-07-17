@@ -14,11 +14,17 @@ public class EnemySpawner : MonoBehaviour
     }
     IEnumerator pollSpawn() {
         polling = true;
-        yield return new WaitForSeconds(15);
+        
         if (enemyInstance == null) {
-        enemyInstance = Instantiate(enemyCopy);
+        enemyInstance = Instantiate(enemyCopy,transform.position,transform.rotation);
         }
+        yield return new WaitForSeconds(15);
+        polling = false;
 
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(transform.position, 2);
     }
     // Update is called once per frame
     void FixedUpdate()
