@@ -1186,7 +1186,7 @@ MonoBehaviour:
   unitController: {fileID: 1082793339}
   attackdelay1: 0.5
   attackdelay2: 0.5
-  attackRange: 3
+  attackRange: 30
   target: {fileID: 0}
   currentAttackType: 2
 --- !u!136 &6213364959713418917
