@@ -12,6 +12,9 @@ public class Agent : Units
     public bool debugmode = true;
     public NavMeshAgent myAgent;
     public AutoAttack attackComponent;
+    public bool isSelected;
+    public GameObject SelectionLight;
+
     // Start is called before the first frame update
     public void Awake()
     {
@@ -58,6 +61,20 @@ public class Agent : Units
                     myAgent.isStopped = false;
             }
         }
-       
+
+        if (isSelected)
+        {
+            if (SelectionLight != null)
+                SelectionLight.SetActive(true);
+            else
+            {
+                SelectionLight = Instantiate(Resources.Load("SelectionLight") as GameObject);
+                SelectionLight.transform.parent = transform;
+                SelectionLight.transform.position = transform.position + Vector3.up * 2F;
+            }
+        }
+        else
+            SelectionLight.SetActive(false);
+
     }
 }

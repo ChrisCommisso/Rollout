@@ -16,6 +16,9 @@ public class CameraController : MonoBehaviour
     public float maxDistFromGround;
     public float minDistFromGround;
     public GameObject SelectionBox;
+    public AudioSource voiceline;
+
+
     private Vector3 selectionStartPoint;
     private Vector3 selectionEndPoint;
 
@@ -49,6 +52,9 @@ public class CameraController : MonoBehaviour
         MovementCheck();
         ClickCheck();
         ZoomCheck();
+        availableUnits.Clear();
+        availableUnits.AddRange(GameObject.FindObjectsOfType<Units>());
+        
     }
     #endregion
 
