@@ -1184,8 +1184,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diceNum: 6
   unitController: {fileID: 1082793339}
-  attackdelay1: 0.5
-  attackdelay2: 0.5
+  attackdelay1: 2
+  attackdelay2: 2
   attackRange: 30
   target: {fileID: 0}
   currentAttackType: 2
