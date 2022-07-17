@@ -207,18 +207,18 @@ public class CameraController : MonoBehaviour
                 GameObject hitGO = hitInfo.collider.gameObject;
                 Units unit = hitGO.GetComponent<Units>();
                 
-                foreach (var agent in selectedUnits)
-                {
-                    if (agent is Agent)
-                    {
-                        if (((Agent)agent).attackComponent != null)
-                            ((Agent)agent).attackComponent.noAttackMove(hitInfo.point);//try to use the attack component if possible
-                        else
-                        {
-                            ((Agent)agent).setDestIfOnNavMesh(hitInfo.point);
-                        }
-                    }
-                }
+              //foreach (var agent in selectedUnits)
+              //{
+              //    if (agent is Agent)
+              //    {
+              //        if (((Agent)agent).attackComponent != null)
+              //            ((Agent)agent).attackComponent.noAttackMove(hitInfo.point);//try to use the attack component if possible
+              //        else
+              //        {
+              //            ((Agent)agent).setDestIfOnNavMesh(hitInfo.point);
+              //        }
+              //    }
+              //}
 
 
                 
@@ -249,7 +249,7 @@ public class CameraController : MonoBehaviour
 
 
                 SelectionBox.transform.position = boxPos;
-                Debug.Log($"Selection Starting Point:{selectionStartPoint}");
+                //Debug.Log($"Selection Starting Point:{selectionStartPoint}");
                 SelectionBox.transform.localScale = new Vector3(betweenVector.x, 14, betweenVector.z);
                 SelectionBox.GetComponent<Collider>();
                 //Check for Units inside Selection Box;

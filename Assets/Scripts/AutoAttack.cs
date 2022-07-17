@@ -21,7 +21,7 @@ public class AutoAttack : MonoBehaviour
     IEnumerator DoAttack(Attackable target) {
         print("attacking");
         agentRef.attacking = true;
-        transform.LookAt(target.transform.position);
+        agentRef.setDestIfOnNavMesh(target.transform.position);
         unitController.SetTrigger("Attack");
         yield return new WaitForSeconds(attackdelay1);
         target.processDamage(Random.Range(1,diceNum+1));
@@ -32,7 +32,8 @@ public class AutoAttack : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        currentAttackType = AttackType.none;
+        
+
         agentRef = GetComponent<Agent>();
     }
     public void doAttackOrder(Attackable attackable) {//target an enemy
@@ -44,7 +45,7 @@ public class AutoAttack : MonoBehaviour
         if (agentRef.setDestIfOnNavMesh(location)) { 
         return true;
         }
-        currentAttackType = AttackType.none;
+        currentAttackType = AttackType.proximity;
         return false;
     }
     public bool noAttackMove(Vector3 location) {//regular movement

@@ -32,7 +32,7 @@ public class Agent : Units
     }
     public bool setDestIfOnNavMesh(Vector3 dest){
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(dest, out hit, 1f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(dest, out hit, 2f, NavMesh.AllAreas))
         {
             myAgent.SetDestination(hit.position);
             return true;

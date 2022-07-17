@@ -22,6 +22,7 @@ namespace Assets.Scripts
             Health = h;
         }
         public void processDamage(int dmg) {
+            GetComponent<HealthDisplay>().displayHealthFor = 4;
             setHealth(Health - dmg);
         }
         public int Health = 6;
