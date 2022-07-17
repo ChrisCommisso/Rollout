@@ -44,7 +44,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 15
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -290,7 +290,7 @@ MonoBehaviour:
   allegiance: 1
   unitParent: {fileID: 38344821191861496}
   Width: 1
-  Height: 1.1
+  Height: 2.5
   Depth: 2.5
   attacking: 0
   minimumFriendlyDistance: 1
@@ -328,7 +328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 606c04634b85cd7469c2cfd8608d2201, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.51
+      value: -0.73
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 606c04634b85cd7469c2cfd8608d2201, type: 3}
       propertyPath: m_LocalPosition.z
