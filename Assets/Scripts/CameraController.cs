@@ -137,8 +137,7 @@ public class CameraController : MonoBehaviour
         float dist = Vector3.Distance(hitInfo[hitInfo.Length - 1].point, transform.position);
         //check for scroll input
         if (Input.mouseScrollDelta.y!=0)
-        {
-            
+        {            
             //CHECK IF NO hit
             if(hitInfo.Length==0)
             {
@@ -152,9 +151,6 @@ public class CameraController : MonoBehaviour
             if (Input.mouseScrollDelta.y > 0
                 && dist > minDistFromGround)
                 transform.position += ray.direction * 3f;
-
-
-
 
         }
 

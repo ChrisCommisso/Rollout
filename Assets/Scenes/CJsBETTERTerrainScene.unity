@@ -830,18 +830,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1804016453, guid: 2d4e6751d03461b4f8b8b01da3067d33, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8730463572054527827, guid: 2d4e6751d03461b4f8b8b01da3067d33, type: 3}
-      propertyPath: maxDistFromGround
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 8730463572054527827, guid: 2d4e6751d03461b4f8b8b01da3067d33, type: 3}
-      propertyPath: minDistFromGround
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 8730463572054527852, guid: 2d4e6751d03461b4f8b8b01da3067d33, type: 3}
       propertyPath: m_RootOrder
       value: 1
