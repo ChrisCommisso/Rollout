@@ -226,7 +226,7 @@ public class CameraController : MonoBehaviour
                     {
                         foreach (Units item in selectedUnits)
                         {
-                            item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(attackAttribute);
+                            item.gameObject.GetComponent<AutoAttack>()?.doAttackOrder(attackAttribute);
                         }
                     }
                     else
@@ -234,7 +234,7 @@ public class CameraController : MonoBehaviour
                         selectionStartPoint = hitInfo.point;
                         foreach (Units item in selectedUnits)
                         {
-                            item.unitParent.GetComponent<AutoAttack>()?.doAttackOrder(selectionStartPoint);
+                            item.gameObject.GetComponent<AutoAttack>()?.doAttackOrder(selectionStartPoint);
                         }
                         
                     }
