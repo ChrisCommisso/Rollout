@@ -158,6 +158,8 @@ MonoBehaviour:
   debugmode: 1
   myAgent: {fileID: 7235143559814043335}
   attackComponent: {fileID: 0}
+  isSelected: 0
+  SelectionLight: {fileID: 0}
 --- !u!114 &2388914501128303146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +200,7 @@ Transform:
   m_GameObject: {fileID: 4977953742373432244}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -24.07, y: 0.8267212, z: -22.063667}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7296599507218449240}

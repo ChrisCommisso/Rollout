@@ -34,7 +34,7 @@ public class Win : MonoBehaviour
         {
             if (a == null) { continue; }
             if (a.allegiance == Units.Allegiance.Enemy) { continue; }
-            if ((a.transform.position - transform.position).sqrMagnitude < 16f)
+            if ((a.transform.position - transform.position).sqrMagnitude < 20001f)
             {
                 End();
                 break;

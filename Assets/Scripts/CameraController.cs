@@ -209,6 +209,8 @@ public class CameraController : MonoBehaviour
             {
                 if (hit)
                 {
+                    hitInfo.collider.gameObject.GetComponent<Win>()?.tryEnd();
+                    
                     foreach (Units unit in selectedUnits)
                     {
                         unit.gameObject.GetComponent<AutoAttack>()?.noAttackMove(hitInfo.point);
