@@ -28,7 +28,15 @@ namespace Assets.Scripts
         private void Update()
         {
             if (Health <- 0) {
-                GameObject.Destroy(this.gameObject);
+                if (UnityEngine.Random.value > .5 && GetComponent<Units>().allegiance == Units.Allegiance.Enemy)
+                {
+                    Health = startingHealth;
+                    GetComponent<Units>().allegiance = Units.Allegiance.Friendly;
+                }
+                else
+                {
+                    GameObject.Destroy(this.gameObject);
+                }
             }
         }
     }

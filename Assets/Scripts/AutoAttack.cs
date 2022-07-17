@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AutoAttack : MonoBehaviour
 {
+    public int diceNum;
     public Animator unitController;
     public float attackdelay1;//delay before damage
     public float attackdelay2;//delay after damage
@@ -22,7 +23,7 @@ public class AutoAttack : MonoBehaviour
         transform.LookAt(target.transform.position);
         unitController.SetTrigger("Attack");
         yield return new WaitForSeconds(attackdelay1);
-        target.processDamage(Random.Range(1,7));
+        target.processDamage(Random.Range(1,diceNum+1));
         yield return new WaitForSeconds(attackdelay2);
         agentRef.attacking = false;
         

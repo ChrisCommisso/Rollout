@@ -14,12 +14,23 @@ public class HealthDisplay : MonoBehaviour
     float prevhealth;
     public float displayHealthFor;
     bool displaying;
+    private void Awake()
+    {
+        if (healthPool == null)
+        {
+            healthPool = GetComponent<Attackable>();
+            thisUnit = GetComponent<Units>();
+        }
+        prevhealth = healthPool.startingHealth;
+        maxhealth = healthPool.startingHealth;
+    }
     IEnumerator displayHealth(float forTime) {
         if (healthBar != null) {
 
             healthBar.SetActive(true);
             displaying = true;
             yield return new WaitForSeconds(forTime);
+            displayHealthFor = 0;
             displaying = false;
             healthBar.SetActive(false);
         }
@@ -27,12 +38,9 @@ public class HealthDisplay : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (healthPool == null)
-        {
-            healthPool = GetComponent<Attackable>();
-            thisUnit = GetComponent<Units>();
-        }
-        else 
+        
+       
+        if(healthPool!=null)
         {
             healthBar.transform.position = transform.position+new Vector3(0, thisUnit.Height+.5f, 0);
             healthBar.transform.localScale = new Vector3(thisUnit.Width * (prevhealth/maxhealth), .1f, .1f);
@@ -40,6 +48,6 @@ public class HealthDisplay : MonoBehaviour
                 StartCoroutine(displayHealth(displayHealthFor));
             }
         }
-        
+        prevhealth = healthPool.Health;
     }
 }
