@@ -23,6 +23,7 @@ public class HealthDisplay : MonoBehaviour
         }
         prevhealth = healthPool.startingHealth;
         maxhealth = healthPool.startingHealth;
+        healthBar.SetActive(false);
     }
     IEnumerator displayHealth(float forTime) {
         if (healthBar != null) {
@@ -43,7 +44,7 @@ public class HealthDisplay : MonoBehaviour
         if(healthPool!=null)
         {
             healthBar.transform.position = transform.position+new Vector3(0, thisUnit.Height+.5f, 0);
-            healthBar.transform.localScale = new Vector3(thisUnit.Width * (prevhealth/maxhealth), .1f, .1f);
+            healthBar.transform.localScale = new Vector3(thisUnit.Width * (prevhealth/maxhealth), .5f, .5f);
             if (displayHealthFor > 0&&!displaying) {
                 StartCoroutine(displayHealth(displayHealthFor));
             }
