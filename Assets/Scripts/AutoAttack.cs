@@ -19,6 +19,7 @@ public class AutoAttack : MonoBehaviour
     public AttackType currentAttackType;//change the attack type to set the 
     Agent agentRef;
     IEnumerator DoAttack(Attackable target) {
+        print("attacking");
         agentRef.attacking = true;
         transform.LookAt(target.transform.position);
         unitController.SetTrigger("Attack");
@@ -73,7 +74,7 @@ public class AutoAttack : MonoBehaviour
                     if (agent.allegiance == agentRef.allegiance) {
                         continue;
                     }
-                    if ((agent.transform.position - transform.position).sqrMagnitude < attackRange * attackRange) {
+                    if ((agent.transform.position - transform.position).sqrMagnitude < attackRange * attackRange&&agentRef?.attacking!=true) {
                         StartCoroutine(DoAttack(agent.gameObject.GetComponent<Attackable>()));
                         break;
                     }
@@ -81,7 +82,7 @@ public class AutoAttack : MonoBehaviour
                 break;
             case AttackType.target:
                 agentRef.setDestIfOnNavMesh(target.transform.position);
-                if ((target.transform.position - agentRef.transform.position).sqrMagnitude < attackRange * attackRange) 
+                if ((target.transform.position - agentRef.transform.position).sqrMagnitude < attackRange * attackRange&&agentRef?.attacking != true) 
                 {
                     StartCoroutine(DoAttack(target));
                 }

@@ -18,6 +18,7 @@ public class EnemySpawner : MonoBehaviour
         if (enemyInstance == null) {
         enemyInstance = Instantiate(enemyCopy);
         }
+
     }
     // Update is called once per frame
     void FixedUpdate()
