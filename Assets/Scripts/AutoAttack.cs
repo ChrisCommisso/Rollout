@@ -24,6 +24,7 @@ public class AutoAttack : MonoBehaviour
         agentRef.setDestIfOnNavMesh(target.transform.position);
         unitController.SetTrigger("Attack");
         yield return new WaitForSeconds(attackdelay1);
+        target.gameObject.GetComponent<AutoAttack>().doAttackOrder(GetComponent<Attackable>());
         target.processDamage(Random.Range(1,diceNum+1));
         yield return new WaitForSeconds(attackdelay2);
         agentRef.attacking = false;
@@ -72,6 +73,9 @@ public class AutoAttack : MonoBehaviour
         {
             case AttackType.proximity:
                 foreach (Agent agent in Agent.agents) {
+                    if (agent == null) {
+                        continue;
+                    }
                     if (agent.allegiance == agentRef.allegiance) {
                         continue;
                     }
