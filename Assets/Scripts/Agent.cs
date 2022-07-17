@@ -73,8 +73,8 @@ public class Agent : Units
                 SelectionLight.transform.position = transform.position + Vector3.up * 2F;
             }
         }
-        else
-            SelectionLight.SetActive(false);
+        else if(SelectionLight!=null)
+            SelectionLight?.SetActive(false);
 
     }
 }

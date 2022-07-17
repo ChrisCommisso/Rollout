@@ -26,6 +26,8 @@ public class SelectionBox : MonoBehaviour
             !CameraController.Instance.selectedUnits.Contains(u))
         {
             CameraController.Instance.selectedUnits.Add(u);
+            u.gameObject.GetComponent<HealthDisplay>().displayHealthFor = 0.5f;
+               
         }
     }
 

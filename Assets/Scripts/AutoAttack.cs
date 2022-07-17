@@ -25,7 +25,9 @@ public class AutoAttack : MonoBehaviour
         unitController.SetTrigger("Attack");
         yield return new WaitForSeconds(attackdelay1);
         target.gameObject.GetComponent<AutoAttack>().doAttackOrder(GetComponent<Attackable>());
-        target.processDamage(Random.Range(1,diceNum+1));
+        int dmg = Random.Range(1, diceNum + 1);
+        target.processDamage(dmg);
+        DamageNumbers.Instance.CreateNumber(target.transform.position,1f,dmg);
         yield return new WaitForSeconds(attackdelay2);
         agentRef.attacking = false;
         

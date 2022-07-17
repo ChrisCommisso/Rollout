@@ -208,6 +208,7 @@ MonoBehaviour:
   maxDistFromGround: 500
   minDistFromGround: 10
   SelectionBox: {fileID: 1804016451}
+  voiceline: {fileID: 0}
 --- !u!114 &831370538689847370
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class DamageNumbers : MonoBehaviour
 {
     public static DamageNumbers Instance;
@@ -31,15 +31,18 @@ public class DamageNumbers : MonoBehaviour
             else
             {
                 numberTimers[i] -= Time.deltaTime;
-                numbers[i].transform.localScale = numbers[i].transform.localScale * 0.95f;
+                numbers[i].transform.localScale = numbers[i].transform.localScale * 0.99845f;
             }
 
         }
     }
 
-    public void CreateNumber(Vector3 WorldPos, float LifeTime)
+    public void CreateNumber(Vector3 WorldPos, float LifeTime, int damageNum)
     {
         GameObject newNumber = Instantiate(numberPool, CameraController.Instance.mainCamera.WorldToScreenPoint(WorldPos), Quaternion.identity, numberCanvas.transform);
+        newNumber.GetComponent<TextMeshProUGUI>().text = damageNum.ToString();
+        newNumber.transform.localScale = Vector3.one;
+        newNumber.transform.position = new Vector3(newNumber.transform.position.x, newNumber.transform.position.y, 0);
         numbers.Add(newNumber);
         numberTimers.Add(LifeTime);
 
