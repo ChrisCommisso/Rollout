@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
     void FixedUpdate()
     {
         if (!polling) {
-            StartCoroutine(pollSpawn());
+            //StartCoroutine(pollSpawn());
         }
     }
 }
